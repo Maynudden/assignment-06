@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useWorkout } from "@/context/WorkoutContext";
 
 
-export default function MyPlan(){
+export default function MyPlan() {
 
   const {
     plan,
@@ -16,24 +16,26 @@ export default function MyPlan(){
   } = useWorkout();
 
 
-  const [activeTab,setActiveTab] = useState("plan");
+  const [activeTab, setActiveTab] = useState("plan");
 
 
   const workouts =
     activeTab === "plan"
-    ? plan
-    : saved;
+      ? plan
+      : saved;
 
 
 
   const totalMinutes = plan.reduce(
-    (sum,item)=>sum + Number(item.duration || 0),
+    (sum, item) =>
+      sum + Number(item.duration || 0),
     0
   );
 
 
   const totalCalories = plan.reduce(
-    (sum,item)=>sum + Number(item.calories || 0),
+    (sum, item) =>
+      sum + Number(item.calories || 0),
     0
   );
 
@@ -70,6 +72,8 @@ export default function MyPlan(){
 
 
 
+        {/* Metrics */}
+
         <div className="
         grid
         md:grid-cols-3
@@ -78,27 +82,38 @@ export default function MyPlan(){
         ">
 
 
-          <div className="bg-[#111] p-6 rounded-xl">
-            <h3>Exercises</h3>
-            <p className="text-3xl font-bold mt-2">
+          <div className="bg-[#111] rounded-xl p-6">
+            <p className="text-gray-400">
+              Exercises
+            </p>
+
+            <h2 className="text-3xl font-bold mt-2">
               {plan.length}
-            </p>
+            </h2>
           </div>
 
 
-          <div className="bg-[#111] p-6 rounded-xl">
-            <h3>Minutes</h3>
-            <p className="text-3xl font-bold mt-2">
+
+          <div className="bg-[#111] rounded-xl p-6">
+            <p className="text-gray-400">
+              Minutes
+            </p>
+
+            <h2 className="text-3xl font-bold mt-2">
               {totalMinutes}
-            </p>
+            </h2>
           </div>
 
 
-          <div className="bg-[#111] p-6 rounded-xl">
-            <h3>Calories</h3>
-            <p className="text-3xl font-bold mt-2">
-              {totalCalories}
+
+          <div className="bg-[#111] rounded-xl p-6">
+            <p className="text-gray-400">
+              Calories
             </p>
+
+            <h2 className="text-3xl font-bold mt-2">
+              {totalCalories}
+            </h2>
           </div>
 
 
@@ -107,7 +122,9 @@ export default function MyPlan(){
 
 
 
-        <div className="flex gap-5 mt-10">
+        {/* Tabs */}
+
+        <div className="flex gap-4 mt-10">
 
 
           <button
@@ -115,7 +132,7 @@ export default function MyPlan(){
           className={
             activeTab==="plan"
             ?
-            "bg-[#ccff00] text-black px-5 py-2 rounded-full"
+            "bg-[#ccff00] text-black px-5 py-2 rounded-full font-bold"
             :
             "border px-5 py-2 rounded-full"
           }
@@ -130,7 +147,7 @@ export default function MyPlan(){
           className={
             activeTab==="saved"
             ?
-            "bg-[#ccff00] text-black px-5 py-2 rounded-full"
+            "bg-[#ccff00] text-black px-5 py-2 rounded-full font-bold"
             :
             "border px-5 py-2 rounded-full"
           }
@@ -144,6 +161,8 @@ export default function MyPlan(){
 
 
 
+
+        {/* Workout List */}
 
         <div className="
         grid
@@ -159,7 +178,7 @@ export default function MyPlan(){
 
             <div>
 
-              <h3 className="font-bold">
+              <h3 className="font-bold text-xl">
                 NOTHING HERE YET
               </h3>
 
@@ -171,11 +190,18 @@ export default function MyPlan(){
 
               <Link
               href="/"
-              className="text-[#ccff00] mt-3 inline-block"
+              className="
+              inline-block
+              mt-4
+              bg-[#ccff00]
+              text-black
+              px-5
+              py-2
+              rounded-full
+              "
               >
                 Go to workouts
               </Link>
-
 
             </div>
 
@@ -190,10 +216,11 @@ export default function MyPlan(){
               key={item.id}
               className="
               bg-[#111]
-              p-5
               rounded-xl
-              "
-              >
+              p-5
+              border
+              border-gray-800
+              ">
 
 
                 <img
@@ -201,7 +228,7 @@ export default function MyPlan(){
                 alt={item.name}
                 className="
                 w-full
-                h-40
+                h-44
                 object-cover
                 rounded-lg
                 "
@@ -237,28 +264,39 @@ export default function MyPlan(){
                     ⏱ {item.duration} min
                   </span>
 
+
                   <span>
                     🔥 {item.calories} kcal
                   </span>
 
+
                   <span>
                     ⭐ {item.rating}
                   </span>
+
 
                 </div>
 
 
 
 
-                <div className="flex gap-3 mt-5 flex-wrap">
+                <div className="
+                flex
+                flex-wrap
+                gap-3
+                mt-5
+                ">
 
 
                   <Link
                   href={`/workout/${item.id}`}
-                  className="text-[#ccff00]"
+                  className="
+                  text-[#ccff00]
+                  "
                   >
                     View Details
                   </Link>
+
 
 
 
@@ -269,7 +307,7 @@ export default function MyPlan(){
                     onClick={()=>markDone(item)}
                     className="
                     border
-                    px-3
+                    px-4
                     py-1
                     rounded-full
                     "
@@ -283,8 +321,9 @@ export default function MyPlan(){
 
 
 
+
                   <button
-                  onClick={()=> 
+                  onClick={()=>
                     activeTab==="plan"
                     ?
                     removeFromPlan(item.id)
@@ -293,12 +332,12 @@ export default function MyPlan(){
                   }
                   className="
                   border
-                  px-3
+                  px-4
                   py-1
                   rounded-full
                   "
                   >
-                    ✕
+                    ✕ Remove
                   </button>
 
 
@@ -310,10 +349,8 @@ export default function MyPlan(){
 
             ))
 
-
           )
         }
-
 
 
         </div>
