@@ -45,6 +45,7 @@ export default function MyPlan() {
 
 
 
+
   return (
 
     <main className="
@@ -62,12 +63,14 @@ export default function MyPlan() {
       ">
 
 
+
         <h1 className="
         text-5xl
         font-black
         ">
           MY PLAN
         </h1>
+
 
 
         <p className="text-gray-400 mt-3">
@@ -146,8 +149,9 @@ export default function MyPlan() {
           </div>
 
 
-
         </div>
+
+
 
 
 
@@ -166,8 +170,12 @@ export default function MyPlan() {
             "border px-5 py-2 rounded-full"
           }
           >
+
             Today's Plan
+
           </button>
+
+
 
 
 
@@ -182,11 +190,15 @@ export default function MyPlan() {
             "border px-5 py-2 rounded-full"
           }
           >
+
             Saved
+
           </button>
 
 
         </div>
+
+
 
 
 
@@ -203,12 +215,13 @@ export default function MyPlan() {
 
 
 
+
         {
+
           workouts.length === 0 ? (
 
 
             <div>
-
 
               <h3 className="font-bold text-xl">
                 NOTHING HERE YET
@@ -218,6 +231,7 @@ export default function MyPlan() {
               <p className="text-gray-400 mt-2">
                 Browse the library and add a lift to get today moving.
               </p>
+
 
 
               <Link
@@ -232,7 +246,9 @@ export default function MyPlan() {
               rounded-full
               "
               >
+
                 Go to workouts
+
               </Link>
 
 
@@ -243,50 +259,69 @@ export default function MyPlan() {
           ) : (
 
 
+
             workouts.map((item:any)=>(
 
 
               <div
+
               key={item.id}
+
               className="
               bg-[#111]
               rounded-xl
               p-5
               border
               border-gray-800
-              ">
+              "
+
+              >
+
 
 
                 <img
+
                 src={item.image || "/banner.png"}
+
                 alt={item.name}
+
                 className="
                 w-full
                 h-44
                 object-cover
                 rounded-lg
                 "
+
                 />
 
 
 
 
-                <h2 className="
+
+
+                <h2
+
+                className="
                 text-xl
                 font-bold
                 mt-4
-                ">
+                "
+
+                >
+
                   {item.name}
+
                 </h2>
 
 
 
+
+
                 {
-                  completed.find(
-                    (workout:any)=>workout.id === item.id
-                  ) && (
+                  completed.includes(item.id) && (
 
                     <span
+
                     className="
                     inline-block
                     mt-2
@@ -298,8 +333,11 @@ export default function MyPlan() {
                     text-xs
                     font-bold
                     "
+
                     >
+
                       COMPLETED
+
                     </span>
 
                   )
@@ -309,9 +347,15 @@ export default function MyPlan() {
 
 
 
+
+
                 <p className="text-gray-400 mt-2">
+
                   {item.equipment}
+
                 </p>
+
+
 
 
 
@@ -345,6 +389,9 @@ export default function MyPlan() {
 
 
 
+
+
+
                 <div className="
                 flex
                 flex-wrap
@@ -353,12 +400,21 @@ export default function MyPlan() {
                 ">
 
 
+
+
                   <Link
+
                   href={`/workout/${item.id}`}
+
                   className="text-[#ccff00]"
+
                   >
+
                     View Details
+
                   </Link>
+
+
 
 
 
@@ -367,17 +423,48 @@ export default function MyPlan() {
                   {
                     activeTab==="plan" && (
 
-                    <button
-                    onClick={()=>markDone(item)}
-                    className="
-                    border
-                    px-4
-                    py-1
-                    rounded-full
-                    "
-                    >
-                      ✓ Mark as Done
-                    </button>
+                      completed.includes(item.id)
+
+                      ?
+
+                      <button
+
+                      disabled
+
+                      className="
+                      bg-[#ccff00]
+                      text-black
+                      px-4
+                      py-1
+                      rounded-full
+                      font-bold
+                      "
+
+                      >
+
+                        ✓ Completed
+
+                      </button>
+
+
+                      :
+
+                      <button
+
+                      onClick={()=>markDone(item)}
+
+                      className="
+                      border
+                      px-4
+                      py-1
+                      rounded-full
+                      "
+
+                      >
+
+                        ✓ Mark as Done
+
+                      </button>
 
                     )
                   }
@@ -386,23 +473,38 @@ export default function MyPlan() {
 
 
 
+
+
+
                   <button
+
                   onClick={()=>
+
                     activeTab==="plan"
+
                     ?
+
                     removeFromPlan(item.id)
+
                     :
+
                     removeFromSaved(item.id)
+
                   }
+
                   className="
                   border
                   px-4
                   py-1
                   rounded-full
                   "
+
                   >
+
                     ✕ Remove
+
                   </button>
+
 
 
                 </div>
@@ -412,14 +514,21 @@ export default function MyPlan() {
               </div>
 
 
+
             ))
 
 
           )
+
         }
 
 
+
+
+
         </div>
+
+
 
 
 
@@ -427,6 +536,7 @@ export default function MyPlan() {
 
 
     </main>
+
 
   );
 

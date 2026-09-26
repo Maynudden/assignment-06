@@ -28,7 +28,7 @@ type WorkoutContextType = {
 
   saved: Workout[];
 
-  completed: Workout[];
+  completed: number[];
 
   toast: string | null;
 
@@ -37,11 +37,11 @@ type WorkoutContextType = {
 
   addToSaved: (workout: Workout) => void;
 
-  removeFromPlan: (id:number) => void;
+  removeFromPlan: (id:number)=>void;
 
-  removeFromSaved: (id:number) => void;
+  removeFromSaved: (id:number)=>void;
 
-  markDone: (workout:Workout) => void;
+  markDone:(workout:Workout)=>void;
 
 };
 
@@ -57,266 +57,263 @@ export function WorkoutProvider({
   children
 }:{
   children:ReactNode
-}) {
+}){
 
 
-  const [plan,setPlan] = useState<Workout[]>([]);
+const [plan,setPlan] = useState<Workout[]>([]);
 
-  const [saved,setSaved] = useState<Workout[]>([]);
+const [saved,setSaved] = useState<Workout[]>([]);
 
-  const [completed,setCompleted] = useState<Workout[]>([]);
+const [completed,setCompleted] = useState<number[]>([]);
 
-  const [toast,setToast] = useState<string | null>(null);
+const [toast,setToast] = useState<string|null>(null);
 
 
 
-  useEffect(()=>{
+useEffect(()=>{
 
-    const savedPlan = localStorage.getItem("plan");
-    const savedWorkout = localStorage.getItem("saved");
-    const savedCompleted = localStorage.getItem("completed");
+const savedPlan = localStorage.getItem("plan");
+const savedWorkout = localStorage.getItem("saved");
+const savedCompleted = localStorage.getItem("completed");
 
 
-    if(savedPlan){
-      setPlan(JSON.parse(savedPlan));
-    }
+if(savedPlan)
+setPlan(JSON.parse(savedPlan));
 
 
-    if(savedWorkout){
-      setSaved(JSON.parse(savedWorkout));
-    }
+if(savedWorkout)
+setSaved(JSON.parse(savedWorkout));
 
 
-    if(savedCompleted){
-      setCompleted(JSON.parse(savedCompleted));
-    }
+if(savedCompleted)
+setCompleted(JSON.parse(savedCompleted));
 
 
-  },[]);
+},[]);
 
 
 
-  useEffect(()=>{
+useEffect(()=>{
 
-    localStorage.setItem(
-      "plan",
-      JSON.stringify(plan)
-    );
+localStorage.setItem(
+"plan",
+JSON.stringify(plan)
+);
 
-  },[plan]);
+},[plan]);
 
 
 
-  useEffect(()=>{
+useEffect(()=>{
 
-    localStorage.setItem(
-      "saved",
-      JSON.stringify(saved)
-    );
+localStorage.setItem(
+"saved",
+JSON.stringify(saved)
+);
 
-  },[saved]);
+},[saved]);
 
 
 
-  useEffect(()=>{
+useEffect(()=>{
 
-    localStorage.setItem(
-      "completed",
-      JSON.stringify(completed)
-    );
+localStorage.setItem(
+"completed",
+JSON.stringify(completed)
+);
 
-  },[completed]);
+},[completed]);
 
 
 
 
-  const showToast = (message:string)=>{
 
-    setToast(message);
+const showToast=(message:string)=>{
 
+setToast(message);
 
-    window.setTimeout(()=>{
 
-      setToast(null);
+setTimeout(()=>{
 
-    },2000);
+setToast(null);
 
-  };
+},2000);
 
+};
 
 
 
-  const addToPlan = (workout:Workout)=>{
 
 
-    if(plan.length >= 5){
+const addToPlan=(workout:Workout)=>{
 
-      showToast("Maximum 5 workouts allowed");
 
-      return;
+if(plan.length>=5){
 
-    }
+showToast("Maximum 5 workouts allowed");
 
+return;
 
+}
 
-    const exists = plan.find(
-      item=>item.id === workout.id
-    );
 
+const exists = plan.find(
+item=>item.id===workout.id
+);
 
 
-    if(!exists){
+if(!exists){
 
-      setPlan([
-        ...plan,
-        workout
-      ]);
+setPlan([
+...plan,
+workout
+]);
 
 
-      showToast(
-        "Added to today's plan"
-      );
+showToast(
+"Added to today's plan"
+);
 
-    }
+}
 
-  };
 
+};
 
 
 
 
-  const addToSaved = (workout:Workout)=>{
 
+const addToSaved=(workout:Workout)=>{
 
-    const exists = saved.find(
-      item=>item.id === workout.id
-    );
 
+const exists=saved.find(
+item=>item.id===workout.id
+);
 
-    if(!exists){
 
-      setSaved([
-        ...saved,
-        workout
-      ]);
+if(!exists){
 
+setSaved([
+...saved,
+workout
+]);
 
-      showToast(
-        "Saved for later"
-      );
 
-    }
+showToast(
+"Saved for later"
+);
 
-  };
+}
 
 
+};
 
 
 
-  const removeFromPlan = (id:number)=>{
 
 
-    setPlan(
-      plan.filter(
-        item=>item.id !== id
-      )
-    );
+const removeFromPlan=(id:number)=>{
 
 
-    showToast(
-      "Removed from plan"
-    );
+setPlan(
+plan.filter(
+item=>item.id!==id
+)
+);
 
 
-  };
+showToast(
+"Removed from plan"
+);
 
 
+};
 
 
 
-  const removeFromSaved = (id:number)=>{
 
 
-    setSaved(
-      saved.filter(
-        item=>item.id !== id
-      )
-    );
+const removeFromSaved=(id:number)=>{
 
 
-    showToast(
-      "Removed from saved"
-    );
+setSaved(
+saved.filter(
+item=>item.id!==id
+)
+);
 
 
-  };
+showToast(
+"Removed from saved"
+);
 
 
+};
 
 
 
-  const markDone = (workout:Workout)=>{
 
 
-    const exists = completed.find(
-      item=>item.id === workout.id
-    );
+const markDone=(workout:Workout)=>{
 
 
-    if(!exists){
+if(!completed.includes(workout.id)){
 
-      setCompleted([
-        ...completed,
-        workout
-      ]);
 
-    }
+setCompleted([
+...completed,
+workout.id
+]);
 
 
-    showToast(
-      `${workout.name} completed`
-    );
+showToast(
+`${workout.name} completed`
+);
 
 
-  };
+}
 
 
+};
 
 
-  return (
 
-    <WorkoutContext.Provider
 
-      value={{
 
-        plan,
+return(
 
-        saved,
+<WorkoutContext.Provider
 
-        completed,
+value={{
 
-        toast,
+plan,
 
+saved,
 
-        addToPlan,
+completed,
 
-        addToSaved,
+toast,
 
-        removeFromPlan,
+addToPlan,
 
-        removeFromSaved,
+addToSaved,
 
-        markDone,
+removeFromPlan,
 
-      }}
+removeFromSaved,
 
-    >
+markDone,
 
-      {children}
+}}
 
-    </WorkoutContext.Provider>
+>
 
-  );
+{children}
+
+</WorkoutContext.Provider>
+
+);
+
 
 }
 
@@ -326,20 +323,20 @@ export function WorkoutProvider({
 
 export function useWorkout(){
 
-  const context = useContext(
-    WorkoutContext
-  );
+
+const context=useContext(WorkoutContext);
 
 
-  if(!context){
+if(!context){
 
-    throw new Error(
-      "useWorkout must be used inside WorkoutProvider"
-    );
+throw new Error(
+"useWorkout must be used inside WorkoutProvider"
+);
 
-  }
+}
 
 
-  return context;
+return context;
+
 
 }
