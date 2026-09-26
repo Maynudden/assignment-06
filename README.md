@@ -65,3 +65,9 @@ The application provides a simple gym companion experience where users can manag
 ## API Used
 
 FitLog API:
+
+## 📬 Submission
+
+- Live Link: https://assignment-06-sepia.vercel.app
+
+- GitHub Repository Link: https://github.com/Maynudden/assignment-06
