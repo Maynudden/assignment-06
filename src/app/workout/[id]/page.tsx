@@ -1,383 +1,483 @@
 "use client";
 
-import { useEffect, useState } from "react";
+
+import { useEffect,useState } from "react";
 import { useParams } from "next/navigation";
 import { useWorkout } from "@/context/WorkoutContext";
 
-export default function WorkoutDetails() {
 
-  const { id } = useParams();
 
-  const { addToPlan, addToSaved } = useWorkout();
+export default function WorkoutDetails(){
 
-  const [workout, setWorkout] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
+const {id}=useParams();
 
-  useEffect(() => {
 
-    async function getWorkout(){
+const {
+addToPlan,
+addToSaved
+}=useWorkout();
 
-      try{
 
-        const res = await fetch(
-          `https://api.abcz.workers.dev/api/fitlog/${id}`
-        );
 
-        const data = await res.json();
+const [workout,setWorkout]=useState<any>(null);
 
-        setWorkout(data);
+const [loading,setLoading]=useState(true);
 
-      }catch(error){
 
-        console.log(error);
 
-      }finally{
 
-        setLoading(false);
 
-      }
+useEffect(()=>{
 
-    }
 
+async function getWorkout(){
 
-    if(id){
-      getWorkout();
-    }
 
-  },[id]);
+try{
 
 
+const res = await fetch(
 
-  if(loading){
+`https://api.api-store.workers.dev/api/fitlog/${id}`
 
-    return (
-      <div className="bg-black min-h-screen text-white flex items-center justify-center">
-        Loading workout...
-      </div>
-    );
+);
 
-  }
 
 
+if(!res.ok){
 
-  if(!workout){
+throw new Error("Failed");
 
-    return (
-      <div className="bg-black min-h-screen text-white flex items-center justify-center">
-        Workout not found
-      </div>
-    );
+}
 
-  }
 
 
+const data = await res.json();
 
-  return (
 
-    <main className="bg-black min-h-screen text-white px-6 py-12">
 
+setWorkout(data);
 
-      <div
-      className="
-      max-w-7xl
-      mx-auto
-      grid
-      md:grid-cols-2
-      gap-10
-      items-start
-      ">
 
 
-        {/* Image */}
+}catch(error){
 
-        <div className="flex items-start">
 
-          <img
-          src={workout.image}
-          alt={workout.name}
-          className="
-          w-full
-          rounded-2xl
-          object-cover
-          "
-          />
+console.log(error);
 
-        </div>
 
+}finally{
 
 
+setLoading(false);
 
-        {/* Details */}
 
-        <div>
+}
 
 
-          <h1
-          className="
-          text-5xl
-          font-black
-          uppercase
-          ">
+}
 
-            {workout.name}
 
-          </h1>
 
 
+if(id){
 
-          <p
-          className="
-          text-gray-400
-          mt-5
-          ">
+getWorkout();
 
-            {workout.description ||
-            "A compound movement that builds strength and improves overall fitness."}
+}
 
-          </p>
 
 
+},[id]);
 
 
 
-          {/* Category Tags */}
 
-          <div className="flex gap-3 mt-6">
 
-            {(workout.category ||
-            workout.categories ||
-            ["Chest","Arms"]).map(
 
-              (item:string)=>(
 
-                <span
-                key={item}
-                className="
-                bg-[#ccff00]
-                text-black
-                px-4
-                py-2
-                rounded-full
-                font-bold
-                "
-                >
 
-                  {item}
+if(loading){
 
-                </span>
 
-              )
+return(
 
-            )}
+<div className="
+bg-black
+min-h-screen
+text-white
+flex
+items-center
+justify-center
+">
 
-          </div>
+Loading workout...
 
+</div>
 
+)
 
+}
 
 
 
 
-          {/* Specs */}
 
-          <div
-          className="
-          mt-8
-          border
-          border-gray-800
-          rounded-xl
-          p-5
-          space-y-3
-          ">
 
 
-            <p>
-              Equipment:
-              <span className="text-gray-400 ml-2">
-                {workout.equipment || "Barbell, Bench"}
-              </span>
-            </p>
+if(!workout){
 
 
+return(
 
-            <p>
-              Difficulty:
-              <span className="text-gray-400 ml-2">
-                {workout.difficulty || "Intermediate"}
-              </span>
-            </p>
+<div className="
+bg-black
+min-h-screen
+text-white
+flex
+items-center
+justify-center
+">
 
+Workout not found
 
+</div>
 
-            <p>
-              Sets:
-              <span className="text-gray-400 ml-2">
-                {workout.sets || "4"}
-              </span>
-            </p>
+)
 
+}
 
 
-            <p>
-              Reps:
-              <span className="text-gray-400 ml-2">
-                {workout.reps || "6-8"}
-              </span>
-            </p>
 
 
 
-            <p>
-              Duration:
-              <span className="text-gray-400 ml-2">
-                {workout.duration} min
-              </span>
-            </p>
 
 
 
-            <p>
-              Calories:
-              <span className="text-gray-400 ml-2">
-                {workout.calories || 180} kcal
-              </span>
-            </p>
+return(
 
+<main className="
+bg-black
+min-h-screen
+text-white
+px-6
+py-12
+">
 
 
-            <p>
-              Rating:
-              <span className="text-gray-400 ml-2">
-                ⭐ {workout.rating}
-              </span>
-            </p>
+<div className="
+max-w-7xl
+mx-auto
+grid
+md:grid-cols-2
+gap-10
+">
 
 
-          </div>
+<div>
 
 
+<img
 
+src={workout.image}
 
+alt={workout.name}
 
+className="
+w-full
+rounded-2xl
+object-cover
+"
 
+/>
 
-          {/* Instructions */}
 
-          <div
-          className="
-          mt-8
-          border
-          border-gray-800
-          rounded-xl
-          p-5
-          ">
+</div>
 
 
-            <h2
-            className="
-            text-2xl
-            font-bold
-            mb-4
-            ">
 
-              INSTRUCTIONS
 
-            </h2>
 
 
 
-            <ol
-            className="
-            list-decimal
-            ml-5
-            text-gray-300
-            space-y-2
-            ">
+<div>
 
 
-              <li>
-                Set up your position correctly before starting the exercise.
-              </li>
+<h1 className="
+text-5xl
+font-black
+uppercase
+">
 
+{workout.name}
 
-              <li>
-                Maintain proper form and controlled movement.
-              </li>
+</h1>
 
 
-              <li>
-                Complete each repetition with full range of motion.
-              </li>
 
 
-              <li>
-                Finish the set safely and rest before the next round.
-              </li>
 
+<p className="
+text-gray-400
+mt-5
+">
 
-            </ol>
+{workout.description}
 
+</p>
 
-          </div>
 
 
 
 
 
 
+<div className="
+flex
+gap-3
+mt-6
+">
 
-          {/* Buttons */}
 
-          <div className="flex gap-4 mt-8">
+{
+(workout.category || []).map(
+(item:string)=>(
 
 
-            <button
-            onClick={()=>addToPlan(workout)}
-            className="
-            bg-[#ccff00]
-            text-black
-            px-6
-            py-3
-            rounded-full
-            font-bold
-            ">
+<span
 
-              ➕ Add to today's plan
+key={item}
 
-            </button>
+className="
+bg-[#ccff00]
+text-black
+px-4
+py-2
+rounded-full
+font-bold
+"
 
+>
 
+{item}
 
+</span>
 
-            <button
-            onClick={()=>addToSaved(workout)}
-            className="
-            border
-            border-white
-            px-6
-            py-3
-            rounded-full
-            ">
 
-              🔖 Save for later
+)
 
-            </button>
+)
 
+}
 
-          </div>
 
 
+</div>
 
-        </div>
 
 
 
-      </div>
 
 
-    </main>
 
-  );
+
+<div className="
+mt-8
+border
+border-gray-800
+rounded-xl
+p-5
+space-y-3
+">
+
+
+
+<p>
+Equipment:
+<span className="text-gray-400 ml-2">
+{workout.equipment}
+</span>
+</p>
+
+
+
+<p>
+Difficulty:
+<span className="text-gray-400 ml-2">
+{workout.difficulty || "Intermediate"}
+</span>
+</p>
+
+
+
+<p>
+Sets:
+<span className="text-gray-400 ml-2">
+{workout.sets || "4"}
+</span>
+</p>
+
+
+
+<p>
+Reps:
+<span className="text-gray-400 ml-2">
+{workout.reps || "6-8"}
+</span>
+</p>
+
+
+
+<p>
+Duration:
+<span className="text-gray-400 ml-2">
+{workout.duration} min
+</span>
+</p>
+
+
+
+<p>
+Calories:
+<span className="text-gray-400 ml-2">
+{workout.calories} kcal
+</span>
+</p>
+
+
+
+<p>
+Rating:
+<span className="text-gray-400 ml-2">
+⭐ {workout.rating}
+</span>
+</p>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div className="
+mt-8
+border
+border-gray-800
+rounded-xl
+p-5
+">
+
+
+<h2 className="
+text-2xl
+font-bold
+mb-4
+">
+
+INSTRUCTIONS
+
+</h2>
+
+
+
+<ol className="
+list-decimal
+ml-5
+space-y-2
+">
+
+
+<li>Set up your position correctly before starting.</li>
+
+<li>Maintain proper form and controlled movement.</li>
+
+<li>Complete every repetition with full range.</li>
+
+<li>Finish safely and rest before next round.</li>
+
+
+</ol>
+
+
+</div>
+
+
+
+
+
+
+
+<div className="
+flex
+gap-4
+mt-8
+">
+
+
+<button
+
+onClick={()=>addToPlan(workout)}
+
+className="
+bg-[#ccff00]
+text-black
+px-6
+py-3
+rounded-full
+font-bold
+"
+
+>
+
+➕ Add to today's plan
+
+</button>
+
+
+
+
+
+<button
+
+onClick={()=>addToSaved(workout)}
+
+className="
+border
+px-6
+py-3
+rounded-full
+"
+
+>
+
+🔖 Save for later
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+</main>
+
+
+)
+
 
 }

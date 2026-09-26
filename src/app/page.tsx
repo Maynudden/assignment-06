@@ -7,383 +7,367 @@ import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 
 
-export default function Home() {
+export default function Home(){
 
 
-  const [workouts,setWorkouts] = useState<any[]>([]);
-  const [loading,setLoading] = useState(true);
-  const [error,setError] = useState("");
+const [workouts,setWorkouts]=useState<any[]>([]);
 
-  const [sortBy,setSortBy] = useState("default");
+const [loading,setLoading]=useState(true);
 
+const [error,setError]=useState("");
 
+const [sortBy,setSortBy]=useState("duration");
 
-  useEffect(()=>{
 
 
-    async function getWorkouts(){
 
+useEffect(()=>{
 
-      try{
 
+async function getWorkouts(){
 
-        const res = await fetch(
-          "https://api.abcz.workers.dev/api/fitlog"
-        );
 
+try{
 
-        if(!res.ok){
 
-          throw new Error(
-            "Failed to fetch workouts"
-          );
+const res = await fetch(
+"https://api.api-store.workers.dev/api/fitlog"
+);
 
-        }
 
 
-        const data = await res.json();
+if(!res.ok){
 
+throw new Error("API Error");
 
-        setWorkouts(data);
+}
 
 
 
-      }catch(err){
+const data = await res.json();
 
 
-        console.log(err);
 
+setWorkouts(data);
 
-        setError(
-          "Unable to load workouts. Please try again."
-        );
 
 
-      }finally{
+}catch(error){
 
 
-        setLoading(false);
+console.log(error);
 
 
-      }
+setError(
+"Unable to load workouts. Please try again."
+);
 
 
-    }
 
+}finally{
 
-    getWorkouts();
 
+setLoading(false);
 
-  },[]);
 
+}
 
 
+}
 
 
-  const sortedWorkouts = [...workouts].sort((a,b)=>{
 
+getWorkouts();
 
-    if(sortBy==="duration"){
 
-      return Number(a.duration || 0) - Number(b.duration || 0);
 
-    }
+},[]);
 
 
-    if(sortBy==="calories"){
 
-      return Number(a.calories || 0) - Number(b.calories || 0);
 
-    }
 
 
-    if(sortBy==="rating"){
 
-      return Number(b.rating || 0) - Number(a.rating || 0);
+const sortedWorkouts=[...workouts].sort((a,b)=>{
 
-    }
 
+if(sortBy==="duration"){
 
-    return 0;
+return Number(a.duration || 0)
+-
+Number(b.duration || 0);
 
+}
 
-  });
 
 
+if(sortBy==="calories"){
 
+return Number(a.calories || 0)
+-
+Number(b.calories || 0);
 
+}
 
 
 
-  return (
+if(sortBy==="rating"){
 
+return Number(b.rating || 0)
+-
+Number(a.rating || 0);
 
-    <main className="
-    bg-black
-    min-h-screen
-    text-white
-    ">
+}
 
 
-      <Navbar />
 
+return 0;
 
-      <Hero />
 
+});
 
 
 
 
-      <section
-      id="library"
-      className="
-      max-w-7xl
-      mx-auto
-      px-6
-      py-20
-      "
-      >
 
 
 
-        <div className="mb-10">
 
+return(
 
-          <h2 className="
-          text-4xl
-          font-bold
-          ">
+<main className="
+bg-black
+min-h-screen
+text-white
+">
 
-            THE LIBRARY
 
-          </h2>
+<Navbar />
 
 
+<Hero />
 
-          <p className="
-          text-gray-400
-          mt-3
-          ">
 
-            Twelve lifts covering every major muscle group.
 
-          </p>
 
+<section
+id="library"
+className="
+max-w-7xl
+mx-auto
+px-6
+py-20
+"
+>
 
 
-        </div>
 
+<div className="mb-10">
 
 
+<h2 className="
+text-4xl
+font-bold
+">
 
+THE LIBRARY
 
-        {
-          !loading &&
-          !error &&
-          workouts.length > 0 && (
+</h2>
 
 
-            <div className="
-            mb-8
-            flex
-            items-center
-            gap-4
-            ">
 
+<p className="
+text-gray-400
+mt-3
+">
 
-              <label
-              className="
-              text-gray-400
-              "
-              >
+Twelve lifts covering every major muscle group.
 
-                Sort By:
+</p>
 
-              </label>
 
+</div>
 
 
-              <select
 
-              value={sortBy}
 
-              onChange={(e)=>
-                setSortBy(e.target.value)
-              }
 
-              className="
-              bg-[#111]
-              border
-              border-gray-800
-              rounded-full
-              px-5
-              py-2
-              text-white
-              "
 
-              >
+{
+!loading &&
+!error &&
+(
 
+<div className="
+mb-8
+flex
+items-center
+gap-4
+">
 
-                <option value="default">
-                  Default
-                </option>
 
+<label className="text-gray-400">
 
-                <option value="duration">
-                  Duration
-                </option>
+Sort By:
 
+</label>
 
-                <option value="calories">
-                  Calories
-                </option>
 
 
-                <option value="rating">
-                  Rating
-                </option>
+<select
 
+value={sortBy}
 
-              </select>
+onChange={(e)=>setSortBy(e.target.value)}
 
+className="
+bg-[#111]
+border
+border-gray-800
+rounded-full
+px-5
+py-2
+"
 
-            </div>
+>
 
 
-          )
+{/* <option value="default">
+Default
+</option> */}
 
-        }
 
+<option value="duration">
+Duration
+</option>
 
 
+<option value="calories">
+Calories
+</option>
 
 
+<option value="rating">
+Rating
+</option>
 
-        {
-          loading && (
 
-            <div className="
-            text-center
-            py-20
-            text-gray-400
-            ">
+</select>
 
-              Loading workouts...
 
-            </div>
+</div>
 
-          )
-        }
+)
 
+}
 
 
 
 
-        {
-          error && (
 
-            <div className="
-            bg-[#111]
-            border
-            border-red-500
-            rounded-xl
-            p-6
-            text-red-400
-            ">
 
-              {error}
+{
+loading && (
 
-            </div>
+<div className="
+text-center
+py-20
+text-gray-400
+">
 
-          )
-        }
+Loading workouts...
 
+</div>
 
+)
 
+}
 
 
 
 
 
-        {
-          !loading &&
-          !error &&
-          workouts.length === 0 && (
 
-            <div className="
-            text-gray-400
-            py-10
-            ">
+{
+error && (
 
-              No workouts found.
+<div className="
+border
+border-red-500
+p-5
+rounded-xl
+text-red-400
+">
 
-            </div>
+{error}
 
-          )
-        }
+</div>
 
+)
 
+}
 
 
 
 
 
-        {
-          !loading &&
-          !error &&
-          workouts.length > 0 && (
 
 
-          <div className="
-          grid
-          grid-cols-1
-          sm:grid-cols-2
-          lg:grid-cols-3
-          gap-6
-          ">
+{
+!loading &&
+!error &&
 
+(
 
-            {
-              sortedWorkouts.map((workout)=>(
+<div className="
+grid
+grid-cols-1
+sm:grid-cols-2
+lg:grid-cols-3
+gap-6
+">
 
 
-                <WorkoutCard
+{
 
-                key={workout.id}
+sortedWorkouts.map((workout)=>(
 
-                workout={workout}
 
-                />
+<WorkoutCard
 
+key={workout.id}
 
-              ))
-            }
+workout={workout}
 
+/>
 
-          </div>
 
+))
 
-          )
+}
 
-        }
 
+</div>
 
+)
 
+}
 
-      </section>
 
 
 
+</section>
 
 
-      <Footer />
 
 
+<Footer />
 
-    </main>
 
+</main>
 
-  );
+)
 
 
 }

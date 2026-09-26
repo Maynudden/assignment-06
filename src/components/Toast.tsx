@@ -18,7 +18,7 @@ export default function Toast() {
     <div
       className="
       fixed
-      bottom-20
+      top-8
       right-8
       z-[999]
       bg-[#ccff00]

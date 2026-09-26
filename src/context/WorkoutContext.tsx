@@ -201,46 +201,50 @@ workout.caloriesBurned ||
 const addToPlan=(workout:Workout)=>{
 
 
-if(plan.length>=5){
+  if(plan.length >= 5){
 
-showToast(
-"Maximum 5 workouts allowed"
-);
+    showToast(
+      "Maximum 5 workouts allowed"
+    );
 
-return;
+    return;
 
-}
-
-
-
-const newWorkout =
-formatWorkout(workout);
+  }
 
 
 
-
-const exists =
-plan.find(
-item=>item.id===newWorkout.id
-);
+  const newWorkout = formatWorkout(workout);
 
 
 
-if(!exists){
+  const exists = plan.find(
+    item => item.id === newWorkout.id
+  );
 
 
-setPlan([
-...plan,
-newWorkout
-]);
+
+  if(exists){
+
+    showToast(
+      "❌ Already in your plan"
+    );
+
+    return;
+
+  }
 
 
-showToast(
-"Added to today's plan"
-);
+
+  setPlan([
+    ...plan,
+    newWorkout
+  ]);
 
 
-}
+
+  showToast(
+    "Added to today's plan"
+  );
 
 
 };
