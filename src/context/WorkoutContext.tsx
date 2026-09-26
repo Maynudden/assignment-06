@@ -10,36 +10,37 @@ import {
 
 
 type Workout = {
-  id: number;
-  name?: string;
-  title?: string;
-  image?: string;
-  equipment?: string;
-  duration?: number;
-  calories?: number;
-  rating?: number;
-  category?: string[];
+  id:number;
+  name?:string;
+  title?:string;
+  image?:string;
+  equipment?:string;
+  duration?:number;
+  calories?:number;
+  rating?:number;
+  category?:string[];
 };
+
 
 
 type WorkoutContextType = {
 
-  plan: Workout[];
+  plan:Workout[];
 
-  saved: Workout[];
+  saved:Workout[];
 
-  completed: number[];
+  completed:number[];
 
-  toast: string | null;
+  toast:string | null;
 
 
-  addToPlan: (workout: Workout) => void;
+  addToPlan:(workout:Workout)=>void;
 
-  addToSaved: (workout: Workout) => void;
+  addToSaved:(workout:Workout)=>void;
 
-  removeFromPlan: (id:number)=>void;
+  removeFromPlan:(id:number)=>void;
 
-  removeFromSaved: (id:number)=>void;
+  removeFromSaved:(id:number)=>void;
 
   markDone:(workout:Workout)=>void;
 
@@ -47,34 +48,48 @@ type WorkoutContextType = {
 
 
 
-const WorkoutContext = createContext<WorkoutContextType | undefined>(
+const WorkoutContext =
+createContext<WorkoutContextType | undefined>(
   undefined
 );
 
 
 
+
+
 export function WorkoutProvider({
-  children
+ children
 }:{
-  children:ReactNode
+ children:ReactNode
 }){
 
 
-const [plan,setPlan] = useState<Workout[]>([]);
+const [plan,setPlan]=useState<Workout[]>([]);
 
-const [saved,setSaved] = useState<Workout[]>([]);
+const [saved,setSaved]=useState<Workout[]>([]);
 
-const [completed,setCompleted] = useState<number[]>([]);
+const [completed,setCompleted]=useState<number[]>([]);
 
-const [toast,setToast] = useState<string|null>(null);
+const [toast,setToast]=useState<string|null>(null);
+
+
 
 
 
 useEffect(()=>{
 
-const savedPlan = localStorage.getItem("plan");
-const savedWorkout = localStorage.getItem("saved");
-const savedCompleted = localStorage.getItem("completed");
+
+const savedPlan =
+localStorage.getItem("plan");
+
+
+const savedWorkout =
+localStorage.getItem("saved");
+
+
+const savedCompleted =
+localStorage.getItem("completed");
+
 
 
 if(savedPlan)
@@ -93,6 +108,8 @@ setCompleted(JSON.parse(savedCompleted));
 
 
 
+
+
 useEffect(()=>{
 
 localStorage.setItem(
@@ -104,6 +121,7 @@ JSON.stringify(plan)
 
 
 
+
 useEffect(()=>{
 
 localStorage.setItem(
@@ -112,6 +130,7 @@ JSON.stringify(saved)
 );
 
 },[saved]);
+
 
 
 
@@ -128,6 +147,7 @@ JSON.stringify(completed)
 
 
 
+
 const showToast=(message:string)=>{
 
 setToast(message);
@@ -139,7 +159,40 @@ setToast(null);
 
 },2000);
 
+
 };
+
+
+
+
+
+
+// calories fix
+
+const formatWorkout=(workout:any)=>{
+
+
+return {
+
+...workout,
+
+
+calories:
+Number(
+workout.calories ||
+workout.calorie ||
+workout.caloriesBurned ||
+0
+)
+
+
+};
+
+
+};
+
+
+
 
 
 
@@ -150,23 +203,35 @@ const addToPlan=(workout:Workout)=>{
 
 if(plan.length>=5){
 
-showToast("Maximum 5 workouts allowed");
+showToast(
+"Maximum 5 workouts allowed"
+);
 
 return;
 
 }
 
 
-const exists = plan.find(
-item=>item.id===workout.id
+
+const newWorkout =
+formatWorkout(workout);
+
+
+
+
+const exists =
+plan.find(
+item=>item.id===newWorkout.id
 );
+
 
 
 if(!exists){
 
+
 setPlan([
 ...plan,
-workout
+newWorkout
 ]);
 
 
@@ -174,10 +239,15 @@ showToast(
 "Added to today's plan"
 );
 
+
 }
 
 
 };
+
+
+
+
 
 
 
@@ -186,16 +256,24 @@ showToast(
 const addToSaved=(workout:Workout)=>{
 
 
-const exists=saved.find(
-item=>item.id===workout.id
+const newWorkout =
+formatWorkout(workout);
+
+
+
+const exists =
+saved.find(
+item=>item.id===newWorkout.id
 );
+
 
 
 if(!exists){
 
+
 setSaved([
 ...saved,
-workout
+newWorkout
 ]);
 
 
@@ -203,10 +281,14 @@ showToast(
 "Saved for later"
 );
 
+
 }
 
 
 };
+
+
+
 
 
 
@@ -233,6 +315,9 @@ showToast(
 
 
 
+
+
+
 const removeFromSaved=(id:number)=>{
 
 
@@ -249,6 +334,9 @@ showToast(
 
 
 };
+
+
+
 
 
 
@@ -280,6 +368,10 @@ showToast(
 
 
 
+
+
+
+
 return(
 
 <WorkoutContext.Provider
@@ -294,6 +386,7 @@ completed,
 
 toast,
 
+
 addToPlan,
 
 addToSaved,
@@ -304,18 +397,25 @@ removeFromSaved,
 
 markDone,
 
+
 }}
 
 >
 
+
 {children}
 
+
 </WorkoutContext.Provider>
+
 
 );
 
 
 }
+
+
+
 
 
 
@@ -324,19 +424,25 @@ markDone,
 export function useWorkout(){
 
 
-const context=useContext(WorkoutContext);
+const context =
+useContext(WorkoutContext);
+
 
 
 if(!context){
+
 
 throw new Error(
 "useWorkout must be used inside WorkoutProvider"
 );
 
+
 }
 
 
+
 return context;
+
 
 
 }

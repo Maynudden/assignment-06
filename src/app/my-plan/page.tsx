@@ -37,10 +37,17 @@ export default function MyPlan() {
   );
 
 
-  const totalCalories = plan.reduce(
-    (sum,item)=>sum + Number(item.calories || 0),
-    0
-  );
+const totalCalories = plan.reduce(
+  (sum,item)=>
+    sum +
+    Number(
+      item.calories ||
+      (item as any).calorie ||
+      (item as any).caloriesBurned ||
+      0
+    ),
+  0
+);
 
 
 

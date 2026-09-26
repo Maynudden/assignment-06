@@ -14,6 +14,8 @@ export default function Home() {
   const [loading,setLoading] = useState(true);
   const [error,setError] = useState("");
 
+  const [sortBy,setSortBy] = useState("default");
+
 
 
   useEffect(()=>{
@@ -24,11 +26,10 @@ export default function Home() {
 
       try{
 
-        
+
         const res = await fetch(
           "https://api.abcz.workers.dev/api/fitlog"
         );
-
 
 
         if(!res.ok){
@@ -40,9 +41,7 @@ export default function Home() {
         }
 
 
-
         const data = await res.json();
-
 
 
         setWorkouts(data);
@@ -72,12 +71,44 @@ export default function Home() {
     }
 
 
-
     getWorkouts();
 
 
-
   },[]);
+
+
+
+
+
+  const sortedWorkouts = [...workouts].sort((a,b)=>{
+
+
+    if(sortBy==="duration"){
+
+      return Number(a.duration || 0) - Number(b.duration || 0);
+
+    }
+
+
+    if(sortBy==="calories"){
+
+      return Number(a.calories || 0) - Number(b.calories || 0);
+
+    }
+
+
+    if(sortBy==="rating"){
+
+      return Number(b.rating || 0) - Number(a.rating || 0);
+
+    }
+
+
+    return 0;
+
+
+  });
+
 
 
 
@@ -146,6 +177,87 @@ export default function Home() {
 
 
 
+        {
+          !loading &&
+          !error &&
+          workouts.length > 0 && (
+
+
+            <div className="
+            mb-8
+            flex
+            items-center
+            gap-4
+            ">
+
+
+              <label
+              className="
+              text-gray-400
+              "
+              >
+
+                Sort By:
+
+              </label>
+
+
+
+              <select
+
+              value={sortBy}
+
+              onChange={(e)=>
+                setSortBy(e.target.value)
+              }
+
+              className="
+              bg-[#111]
+              border
+              border-gray-800
+              rounded-full
+              px-5
+              py-2
+              text-white
+              "
+
+              >
+
+
+                <option value="default">
+                  Default
+                </option>
+
+
+                <option value="duration">
+                  Duration
+                </option>
+
+
+                <option value="calories">
+                  Calories
+                </option>
+
+
+                <option value="rating">
+                  Rating
+                </option>
+
+
+              </select>
+
+
+            </div>
+
+
+          )
+
+        }
+
+
+
+
+
 
         {
           loading && (
@@ -162,8 +274,6 @@ export default function Home() {
 
           )
         }
-
-
 
 
 
@@ -218,7 +328,6 @@ export default function Home() {
 
 
 
-
         {
           !loading &&
           !error &&
@@ -235,7 +344,7 @@ export default function Home() {
 
 
             {
-              workouts.map((workout)=>(
+              sortedWorkouts.map((workout)=>(
 
 
                 <WorkoutCard
