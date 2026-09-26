@@ -22,12 +22,13 @@ type Workout = {
 };
 
 
-
 type WorkoutContextType = {
 
   plan: Workout[];
 
   saved: Workout[];
+
+  completed: Workout[];
 
   toast: string | null;
 
@@ -63,6 +64,8 @@ export function WorkoutProvider({
 
   const [saved,setSaved] = useState<Workout[]>([]);
 
+  const [completed,setCompleted] = useState<Workout[]>([]);
+
   const [toast,setToast] = useState<string | null>(null);
 
 
@@ -70,21 +73,22 @@ export function WorkoutProvider({
   useEffect(()=>{
 
     const savedPlan = localStorage.getItem("plan");
-
     const savedWorkout = localStorage.getItem("saved");
+    const savedCompleted = localStorage.getItem("completed");
 
 
     if(savedPlan){
-
       setPlan(JSON.parse(savedPlan));
-
     }
 
 
     if(savedWorkout){
-
       setSaved(JSON.parse(savedWorkout));
+    }
 
+
+    if(savedCompleted){
+      setCompleted(JSON.parse(savedCompleted));
     }
 
 
@@ -114,20 +118,32 @@ export function WorkoutProvider({
 
 
 
+  useEffect(()=>{
+
+    localStorage.setItem(
+      "completed",
+      JSON.stringify(completed)
+    );
+
+  },[completed]);
 
 
-const showToast = (message:string)=>{
-
-  setToast(message);
 
 
-  window.setTimeout(()=>{
+  const showToast = (message:string)=>{
 
-    setToast(null);
+    setToast(message);
 
-  },2000);
 
-};
+    window.setTimeout(()=>{
+
+      setToast(null);
+
+    },2000);
+
+  };
+
+
 
 
   const addToPlan = (workout:Workout)=>{
@@ -163,9 +179,7 @@ const showToast = (message:string)=>{
 
     }
 
-
   };
-
 
 
 
@@ -193,10 +207,7 @@ const showToast = (message:string)=>{
 
     }
 
-
   };
-
-
 
 
 
@@ -223,8 +234,6 @@ const showToast = (message:string)=>{
 
 
 
-
-
   const removeFromSaved = (id:number)=>{
 
 
@@ -246,9 +255,22 @@ const showToast = (message:string)=>{
 
 
 
-
-
   const markDone = (workout:Workout)=>{
+
+
+    const exists = completed.find(
+      item=>item.id === workout.id
+    );
+
+
+    if(!exists){
+
+      setCompleted([
+        ...completed,
+        workout
+      ]);
+
+    }
 
 
     showToast(
@@ -257,10 +279,6 @@ const showToast = (message:string)=>{
 
 
   };
-
-
-
-
 
 
 
@@ -274,6 +292,8 @@ const showToast = (message:string)=>{
         plan,
 
         saved,
+
+        completed,
 
         toast,
 
@@ -297,7 +317,6 @@ const showToast = (message:string)=>{
     </WorkoutContext.Provider>
 
   );
-
 
 }
 

@@ -7,37 +7,41 @@ import { useWorkout } from "@/context/WorkoutContext";
 
 export default function MyPlan() {
 
+
   const {
     plan,
     saved,
+    completed,
     removeFromPlan,
     removeFromSaved,
     markDone
   } = useWorkout();
 
 
-  const [activeTab, setActiveTab] = useState("plan");
+
+  const [activeTab,setActiveTab] = useState("plan");
+
 
 
   const workouts =
     activeTab === "plan"
-      ? plan
-      : saved;
+    ? plan
+    : saved;
+
 
 
 
   const totalMinutes = plan.reduce(
-    (sum, item) =>
-      sum + Number(item.duration || 0),
+    (sum,item)=>sum + Number(item.duration || 0),
     0
   );
 
 
   const totalCalories = plan.reduce(
-    (sum, item) =>
-      sum + Number(item.calories || 0),
+    (sum,item)=>sum + Number(item.calories || 0),
     0
   );
+
 
 
 
@@ -72,17 +76,18 @@ export default function MyPlan() {
 
 
 
-        {/* Metrics */}
+
 
         <div className="
         grid
-        md:grid-cols-3
+        md:grid-cols-4
         gap-5
         mt-10
         ">
 
 
           <div className="bg-[#111] rounded-xl p-6">
+
             <p className="text-gray-400">
               Exercises
             </p>
@@ -90,11 +95,14 @@ export default function MyPlan() {
             <h2 className="text-3xl font-bold mt-2">
               {plan.length}
             </h2>
+
           </div>
 
 
 
+
           <div className="bg-[#111] rounded-xl p-6">
+
             <p className="text-gray-400">
               Minutes
             </p>
@@ -102,11 +110,15 @@ export default function MyPlan() {
             <h2 className="text-3xl font-bold mt-2">
               {totalMinutes}
             </h2>
+
           </div>
 
 
 
+
+
           <div className="bg-[#111] rounded-xl p-6">
+
             <p className="text-gray-400">
               Calories
             </p>
@@ -114,7 +126,25 @@ export default function MyPlan() {
             <h2 className="text-3xl font-bold mt-2">
               {totalCalories}
             </h2>
+
           </div>
+
+
+
+
+
+          <div className="bg-[#111] rounded-xl p-6">
+
+            <p className="text-gray-400">
+              Completed
+            </p>
+
+            <h2 className="text-3xl font-bold mt-2">
+              {completed.length}
+            </h2>
+
+          </div>
+
 
 
         </div>
@@ -122,7 +152,6 @@ export default function MyPlan() {
 
 
 
-        {/* Tabs */}
 
         <div className="flex gap-4 mt-10">
 
@@ -139,6 +168,7 @@ export default function MyPlan() {
           >
             Today's Plan
           </button>
+
 
 
 
@@ -162,7 +192,7 @@ export default function MyPlan() {
 
 
 
-        {/* Workout List */}
+
 
         <div className="
         grid
@@ -176,7 +206,9 @@ export default function MyPlan() {
         {
           workouts.length === 0 ? (
 
+
             <div>
+
 
               <h3 className="font-bold text-xl">
                 NOTHING HERE YET
@@ -203,7 +235,9 @@ export default function MyPlan() {
                 Go to workouts
               </Link>
 
+
             </div>
+
 
 
           ) : (
@@ -236,6 +270,7 @@ export default function MyPlan() {
 
 
 
+
                 <h2 className="
                 text-xl
                 font-bold
@@ -246,7 +281,35 @@ export default function MyPlan() {
 
 
 
-                <p className="text-gray-400">
+                {
+                  completed.find(
+                    (workout:any)=>workout.id === item.id
+                  ) && (
+
+                    <span
+                    className="
+                    inline-block
+                    mt-2
+                    bg-[#ccff00]
+                    text-black
+                    px-3
+                    py-1
+                    rounded-full
+                    text-xs
+                    font-bold
+                    "
+                    >
+                      COMPLETED
+                    </span>
+
+                  )
+                }
+
+
+
+
+
+                <p className="text-gray-400 mt-2">
                   {item.equipment}
                 </p>
 
@@ -259,6 +322,7 @@ export default function MyPlan() {
                 text-sm
                 mt-4
                 ">
+
 
                   <span>
                     ⏱ {item.duration} min
@@ -280,6 +344,7 @@ export default function MyPlan() {
 
 
 
+
                 <div className="
                 flex
                 flex-wrap
@@ -290,12 +355,11 @@ export default function MyPlan() {
 
                   <Link
                   href={`/workout/${item.id}`}
-                  className="
-                  text-[#ccff00]
-                  "
+                  className="text-[#ccff00]"
                   >
                     View Details
                   </Link>
+
 
 
 
@@ -344,16 +408,19 @@ export default function MyPlan() {
                 </div>
 
 
+
               </div>
 
 
             ))
+
 
           )
         }
 
 
         </div>
+
 
 
       </div>
